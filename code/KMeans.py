@@ -4,17 +4,10 @@ Created on Mar 1, 2019
 @author: Ying
 '''
 from sklearn.cluster import KMeans
-# import random
 from time import time
 
 
 numOfVariable=74
-
-# def generate(n):
-#     g = []
-#     for _i in range(n):
-#         g.append(random.randint(1, 100))
-#     return g
 
 def kmeans(clusters, data, weight):
     t0 = time()
@@ -35,15 +28,26 @@ with open(filename) as fn:
         dataset.append(vlist)
    
 fn.close()
-# dataset=[]
-# for _i in range(1000):
-#     dataset.append(generate(10))
+
+filename="Bio_train\\bio_test.dat"
+testset=[]
+with open(filename) as fn:
+    for line in fn:
+        data = line.split('\t')        
+        data = data[3:]        
+        data[numOfVariable-1] = data[numOfVariable-1].strip()
+        vlist=[]
+        for value in data:
+            vlist.append(float(value))
+        testset.append(vlist)
+   
+fn.close()
 
 clusters=[100,500]
 print("done")
 for k in clusters:
     totalKM, totalT = kmeans(k, dataset, None)
-    labels = totalKM.labels_
+    labels = totalKM.predict(testset)
     with open("Bio_train\\Full set k="+str(k)+".txt",'w',encoding='utf-8') as f:
         f.write("used time: "+str(totalT)+"\n# of Clusters:"+str(k)+"\nCluster\n")
         for item in labels:
@@ -52,7 +56,7 @@ for k in clusters:
 
 sampleSize=[1000,2000,5000]
 repeat=[1,2,3]
- 
+
 for s in sampleSize:
     for r in repeat:
         subData=[]
@@ -67,8 +71,8 @@ for s in sampleSize:
             print("done")
             for k in clusters:
                 predictKM, pTime = kmeans(k, subData, weights)
-                predict_lable = predictKM.predict(dataset)
-                with open("Bio_train\\Prediction "+str(s)+" r="+str(r)+" k="+str(k)+".txt",'w',encoding='utf-8') as f:
+                predict_lable = predictKM.predict(testset)
+                with open("Bio_train\\LWCS "+str(s)+" r="+str(r)+" k="+str(k)+".txt",'w',encoding='utf-8') as f:
                     f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     for item in predict_lable:
                         f.write(str(item)+'\n')    
