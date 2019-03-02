@@ -1,0 +1,6 @@
+homogeneity_score: 0.6100086489054568
+completeness_score: 0.666530208073463
+v_measure_score: 0.6370181204570734
+adjusted_rand_score: 0.32606108845569676
+adjusted_mutual_info_score: 0.607197604286734
+fowlkes_mallows_score:0.34598864530747203
