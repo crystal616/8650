@@ -17,7 +17,7 @@ def kmeans(clusters, data, weight):
 def eudistance(a, centroid):
     d=0
     for i in range(len(a)):
-       d += math.pow((vector[i]-centroid[i]),2) 
+       d += math.pow((a[i]-centroid[i]),2) 
     return d
 
 def compute_quantization_error(data, labels, cluster_centers):
