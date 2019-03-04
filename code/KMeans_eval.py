@@ -26,7 +26,7 @@ def compute_quantization_error(data, labels, cluster_centers):
       error += eudistance(data[i], cluster_centers[labels[i]])
     return error
 
-parser = argparse.ArgumentParser(description='Lightweight coreset construction')
+parser = argparse.ArgumentParser(description='run kmean++ on full and sample datasets')
 parser.add_argument('numOfVariable', type=int, help='number of attributes')
 parser.add_argument('filename', type=str, help='filename')
 parser.add_argument('--seperator', type=str, default='\t', required=False, choices=['\t',' ',','], help='the character used to seperate values')
@@ -39,7 +39,8 @@ dataset=[]
 with open(filename) as fn:
     for line in fn:
         data = line.split(seperator)        
-        data = data[1:]        
+        data = data[3:]        
+        data[numOfVariable-1] = data[numOfVariable-1].strip()    
         vlist=[]
         for value in data:
             vlist.append(float(value))
