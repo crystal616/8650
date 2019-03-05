@@ -28,19 +28,21 @@ def compute_quantization_error(data, labels, cluster_centers):
 
 parser = argparse.ArgumentParser(description='run kmean++ on full and sample datasets')
 parser.add_argument('numOfVariable', type=int, help='number of attributes')
+parser.add_argument('excludeVariable',type=int,help='number of attributes which need to be excluded')
 parser.add_argument('filename', type=str, help='filename')
 parser.add_argument('--seperator', type=str, default='\t', required=False, choices=['\t',' ',','], help='the character used to seperate values')
 args = parser.parse_args()
 numOfVariable = args.numOfVariable
+excludeVariable = args.excludeVariable
 filename = args.filename
 seperator = args.seperator
 
 dataset=[]
 with open(filename) as fn:
     for line in fn:
-        data = line.split(seperator)        
-        data = data[3:]        
+        data = line.split(seperator)                        
         data[numOfVariable-1] = data[numOfVariable-1].strip()    
+		data = data[excludeVariable:]
         vlist=[]
         for value in data:
             vlist.append(float(value))
@@ -64,11 +66,12 @@ for k in clusters:
                 f.write(str(item)+'\t')
             f.write('\n')
 
-sampleSize=[1000,2000,5000]
-repeat=[1,2,3]
+sampleSize=[1000,2000,5000,10000,20000]
+repeat=50
+coresetType=['LWCS','Uniform','CS']
 
 for s in sampleSize:
-    for r in repeat:
+    for r in range(repeat):
         subData=[]
         weights=[]
         with open(filename[:-4]+"_"+str(s)+"_"+str(r)+".txt") as f:
