@@ -69,9 +69,9 @@ if __name__ == '__main__':
     dataset=[]
     with open(filename) as fn:
         for line in fn:
-            data = line.split(seperator)
-            data[numOfVariable-1] = data[numOfVariable-1].strip()
-            data = data[excludeVariable:]            
+            data = line.split(seperator)            
+            data = data[excludeVariable:]  
+            data[numOfVariable-1] = data[numOfVariable-1].strip()          
             vlist=[]
             for value in data:
                 vlist.append(float(value))
@@ -189,7 +189,7 @@ if __name__ == '__main__':
                     subData.append(dataset[item])
             f.close()
             for k in clusters:
-                predictKM, pTime = kmeans(k, subData, weights)
+                predictKM, pTime = kmeans(k, subData, None)
                 labels = predictKM.predict(dataset)
                 error = compute_quantization_error(dataset, labels, predictKM.cluster_centers_)
                 with open(filename[:-4]+"_Uniform_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
