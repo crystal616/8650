@@ -127,7 +127,8 @@ if __name__ == '__main__':
         size.append(x)
        
     
-    sampleSize = [1000,2000,5000]
+    sampleSize = [1000,2000,5000,10000,20000]
+	#lightweaight coreset
     for s in sampleSize:
         for sampleTimes in range(3):
             chosen=np.random.choice(size, s, replace=False, p=posibilities)
@@ -135,7 +136,8 @@ if __name__ == '__main__':
                 for item in chosen:
                     f.write(str(item)+"\t"+str(1/(s*float(posibilities[item])))+'\n')
             f.close()
-     
+    
+	#uniform sampling
 	for s in sampleSize:
 		for sampleTimes in range(3):
 			chosen = np.random.choice(size, s, replace=False)
@@ -144,4 +146,6 @@ if __name__ == '__main__':
                     f.write(str(item)+'\n')
             f.close()
 
+	#CS coreset
+	
 	
