@@ -146,24 +146,64 @@ if __name__ == '__main__':
     
     sampleSize = [1000,2000,5000,10000,20000]
 	repeat = 50
+	clusters=[100,500]
 	
 	#lightweaight coreset
     for s in sampleSize:
         for sampleTimes in range(repeat):
-            chosen=np.random.choice(size, s, replace=False, p=posibilities)
+            chosen=np.random.choice(size, s, replace=False, p=posibilities)	
+			subset=[]
+			weights=[]
             with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " LWCS.txt",'w',encoding='utf-8') as f:
                 for item in chosen:
                     f.write(str(item)+"\t"+str(1/(s*float(posibilities[item])))+'\n')
+					subset.append(dataset[item])
+					weights.append(1/(s*float(posibilities[item])))
             f.close()
+			for k in clusters:
+				predictKM, pTime = kmeans(k, subData, weights)
+                labels = predictKM.predict(dataset)
+                error = compute_quantization_error(dataset, labels, predictKM.cluster_centers_)
+                with open(filename[:-4]+"_LWCS_"+str(s)+"_r_"+str(r)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
+                    f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
+                    f.write('quantization error on the full data set: '+str(error)+'\n')
+                    f.write('\n\nlabels for full data set:\n')
+                    for item in labels:
+                        f.write(str(item)+'\n')    
+                    f.write('\n\ncluster centroids:\n')
+                    for item in predictKM.cluster_centers_:
+                        for coord in item:
+                           f.write(str(item)+'\t')
+                        f.write('\n')
+                    f.close()
+			
     
 	#uniform sampling
 	for s in sampleSize:
 		for sampleTimes in range(repeat):
 			chosen = np.random.choice(size, s, replace=False)
+			subset=[]
 			with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
                 for item in chosen:
                     f.write(str(item)+'\n')
+					subset.append(dataset[item])
             f.close()
+			for k in clusters:
+				predictKM, pTime = kmeans(k, subData, weights)
+                labels = predictKM.predict(dataset)
+                error = compute_quantization_error(dataset, labels, predictKM.cluster_centers_)
+                with open(filename[:-4]+"_Uniform_"+str(s)+"_r_"+str(r)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
+                    f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
+                    f.write('quantization error on the full data set: '+str(error)+'\n')
+                    f.write('\n\nlabels for full data set:\n')
+                    for item in labels:
+                        f.write(str(item)+'\n')    
+                    f.write('\n\ncluster centroids:\n')
+                    for item in predictKM.cluster_centers_:
+                        for coord in item:
+                           f.write(str(item)+'\t')
+                        f.write('\n')
+                    f.close()
 
 	#CS coreset
 	
