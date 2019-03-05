@@ -131,7 +131,7 @@ if __name__ == '__main__':
     for s in sampleSize:
         for sampleTimes in range(3):
             chosen=np.random.choice(size, s, replace=False, p=posibilities)
-            with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + ".txt",'w',encoding='utf-8') as f:
+            with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " LWCS.txt",'w',encoding='utf-8') as f:
                 for item in chosen:
                     f.write(str(item)+"\t"+str(1/(s*float(posibilities[item])))+'\n')
             f.close()
