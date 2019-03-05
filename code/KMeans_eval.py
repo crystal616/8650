@@ -17,13 +17,13 @@ def kmeans(clusters, data, weight):
 def eudistance(a, centroid):
     d=0
     for i in range(len(a)):
-       d += math.pow((a[i]-centroid[i]),2) 
+        d += math.pow((a[i]-centroid[i]),2) 
     return d
 
 def compute_quantization_error(data, labels, cluster_centers):
     error = 0
     for i in range(len(data)):
-      error += eudistance(data[i], cluster_centers[labels[i]])
+        error += eudistance(data[i], cluster_centers[labels[i]])
     return error
 
 parser = argparse.ArgumentParser(description='run kmean++ on full and sample datasets')
@@ -40,9 +40,9 @@ seperator = args.seperator
 dataset=[]
 with open(filename) as fn:
     for line in fn:
-        data = line.split(seperator)
-		data = data[excludeVariable:]
-		data[numOfVariable-1] = data[numOfVariable-1].strip() 
+        data = line.split(seperator) 
+        data = data[excludeVariable:]                       
+        data[numOfVariable-1] = data[numOfVariable-1].strip()
         vlist=[]
         for value in data:
             vlist.append(float(value))
@@ -63,9 +63,10 @@ for k in clusters:
         f.write('\n\ncluster centroids:\n')
         for item in totalKM.cluster_centers_:
             for coord in item:
-                f.write(str(item)+'\t')
+                f.write(str(coord)+'\t')
             f.write('\n')
-
+        f.close()
+        
 sampleSize=[1000,2000,5000,10000,20000]
 repeat=50
 coresetType=['LWCS','Uniform','CS']
@@ -94,7 +95,7 @@ for s in sampleSize:
                     f.write('\n\ncluster centroids:\n')
                     for item in predictKM.cluster_centers_:
                         for coord in item:
-                           f.write(str(item)+'\t')
+                            f.write(str(coord)+'\t')
                         f.write('\n')
                     f.close()                    
                     
