@@ -40,9 +40,9 @@ seperator = args.seperator
 dataset=[]
 with open(filename) as fn:
     for line in fn:
-        data = line.split(seperator)                        
-        data[numOfVariable-1] = data[numOfVariable-1].strip()    
+        data = line.split(seperator)
 		data = data[excludeVariable:]
+		data[numOfVariable-1] = data[numOfVariable-1].strip() 
         vlist=[]
         for value in data:
             vlist.append(float(value))
