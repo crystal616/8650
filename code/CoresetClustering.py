@@ -1,10 +1,13 @@
 '''
 Created on Feb 27, 2019
-Construct coresets by uniform sampling or by LWCS algorithm
+Construct coresets by uniform sampling or by LWCS algorithm.
+Analyse their performances by computing quantization errors.
+
 (LWCS algorithm:
 Sampling m weighted points from datasets. Each point x has weight 1/(m*q(x)) 
 and is sampled with probability q(x)=1/2n+(d〖(x,μ)〗^2)/(2∑_(x^'∈X)▒〖d(x^',μ)〗^2 )  
 where μ is the mean of the whole dataset X.
+
 @author: Ying Cai, Wenxing Zhang
 '''
 from multiprocessing import Pool
