@@ -187,12 +187,12 @@ if __name__ == '__main__':
                         f.write('\n')
                     f.close()
         with open(filename[:-4]+'_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
-			f.write("Sample Size: "+str(s)+"\n")
-			f.write("Clusters=100\tClusters=500\n")
+	    f.write("Sample Size: "+str(s)+"\n")
+	    f.write("Clusters=100\tClusters=500\n")
             for item in variances:
-				for v in item:
-					f.write(str(v)+"\t")
-				f.write("\n")
+		for v in item:
+		    f.write(str(v)+"\t")
+		    f.write("\n")
         f.close()  
     
     #uniform sampling
@@ -225,13 +225,13 @@ if __name__ == '__main__':
                         f.write('\n')
                     f.close()
 		with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
-			f.write("Sample Size: "+str(s)+"\n")
-			f.write("Clusters=100\tClusters=500\n")
-            for item in variances:
-				for v in item:
-					f.write(str(v)+"\t")
-				f.write("\n")
-        f.close()
+		    f.write("Sample Size: "+str(s)+"\n")
+		    f.write("Clusters=100\tClusters=500\n")
+                    for item in variances:
+		        for v in item:
+			    f.write(str(v)+"\t")
+			    f.write("\n")
+                f.close()
 		
 		
 
