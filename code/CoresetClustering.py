@@ -157,9 +157,9 @@ if __name__ == '__main__':
     
     #lightweaight coreset
     for s in sampleSize:
-		variances=[]		
+	variances=[]		
         for sampleTimes in range(repeat):	
-			variances[sampleTimes]=[]
+	    variances[sampleTimes]=[]
             chosen=np.random.choice(size, s, replace=False, p=posibilities)    
             subData=[]
             weights=[]
@@ -173,7 +173,7 @@ if __name__ == '__main__':
                 predictKM, pTime = kmeans(k, subData, weights)
                 labels = predictKM.predict(dataset)
                 error = compute_quantization_error(dataset, labels, predictKM.cluster_centers_)
-				variances[sampleTimes].append(error)
+		variances[sampleTimes].append(error)
                 with open(filename[:-4]+"_LWCS_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
                     f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
@@ -197,9 +197,9 @@ if __name__ == '__main__':
     
     #uniform sampling
     for s in sampleSize:
-		variances=[]
+	variances=[]
         for sampleTimes in range(repeat):
-			variances[sampleTimes]=[]
+	    variances[sampleTimes]=[]
             chosen = np.random.choice(size, s, replace=False)
             subData=[]
             with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
@@ -211,7 +211,7 @@ if __name__ == '__main__':
                 predictKM, pTime = kmeans(k, subData, None)
                 labels = predictKM.predict(dataset)
                 error = compute_quantization_error(dataset, labels, predictKM.cluster_centers_)
-				variances[sampleTimes].append(error)
+		variances[sampleTimes].append(error)
                 with open(filename[:-4]+"_Uniform_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
                     f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
