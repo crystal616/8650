@@ -159,7 +159,7 @@ if __name__ == '__main__':
     for s in sampleSize:
         variances=[]		
         for sampleTimes in range(repeat):	
-			variances[sampleTimes]=[]
+            variances[sampleTimes]=[]
             chosen=np.random.choice(size, s, replace=False, p=posibilities)    
             subData=[]
             weights=[]
@@ -197,9 +197,9 @@ if __name__ == '__main__':
     
     #uniform sampling
     for s in sampleSize:
-		variances=[]
+        variances=[]
         for sampleTimes in range(repeat):
-			variances[sampleTimes]=[]
+            variances[sampleTimes]=[]
             chosen = np.random.choice(size, s, replace=False)
             subData=[]
             with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
