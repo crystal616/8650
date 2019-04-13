@@ -198,7 +198,7 @@ if __name__ == '__main__':
     #uniform sampling
     for s in sampleSize:
 	variances=[]
-        for sampleTimes in range(repeat):
+	for sampleTimes in range(repeat):
 	    variances[sampleTimes]=[]
             chosen = np.random.choice(size, s, replace=False)
             subData=[]
@@ -224,14 +224,14 @@ if __name__ == '__main__':
                             f.write(str(item)+'\t')
                         f.write('\n')
                     f.close()
-		with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
-		    f.write("Sample Size: "+str(s)+"\n")
-		    f.write("Clusters=100\tClusters=500\n")
-                    for item in variances:
-		        for v in item:
-			    f.write(str(v)+"\t")
-			    f.write("\n")
-                f.close()
+	with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
+	    f.write("Sample Size: "+str(s)+"\n")
+	    f.write("Clusters=100\tClusters=500\n")
+                for item in variances:
+		    for v in item:
+			f.write(str(v)+"\t")
+		        f.write("\n")
+            f.close()
 		
 		
 
