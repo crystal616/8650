@@ -157,7 +157,7 @@ if __name__ == '__main__':
     
     #lightweaight coreset
     for s in sampleSize:
-		variances=[]		
+        variances=[]		
         for sampleTimes in range(repeat):	
 			variances[sampleTimes]=[]
             chosen=np.random.choice(size, s, replace=False, p=posibilities)    
