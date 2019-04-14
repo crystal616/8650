@@ -17,9 +17,11 @@ import sys
 def kmedoids(k, data, weight, maxiteration):      
     t0 = time()
     currentcenter = np.random.choice(len(data), k, replace=False)   
+    usediterations=0 
     for _i in range(maxiteration):
         currentcluster=assignclusters(currentcenter, data)
         currentcenter, tolerance=optimalcenter(data, currentcenter, currentcluster, weight, k)
+        usediterations += 1
         if tolerance:
             break
     currentcluster=assignclusters(currentcenter, data)
