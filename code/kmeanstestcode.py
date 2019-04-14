@@ -183,7 +183,7 @@ if __name__ == '__main__':
                     f.write('\n\ncluster centroids:\n')
                     for item in predictKM.cluster_centers_:
                         for coord in item:
-                            f.write(str(item)+'\t')
+                            f.write(str(coord)+'\t')
                         f.write('\n')
                     f.close()
         with open(filename[:-4]+'_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
@@ -221,7 +221,7 @@ if __name__ == '__main__':
                     f.write('\n\ncluster centroids:\n')
                     for item in predictKM.cluster_centers_:
                         for coord in item:
-                            f.write(str(item)+'\t')
+                            f.write(str(coord)+'\t')
                         f.write('\n')
                     f.close()
 		with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
@@ -234,6 +234,6 @@ if __name__ == '__main__':
         f.close()
 		
 		
-    #CS coreset
+
     
     
