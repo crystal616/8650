@@ -16,54 +16,59 @@ def kmedoids(k, data, maxiteration):
     t0 = time()
     currentcenter = np.random.choice(len(data), k, replace=False)   
     usediterations=0 
-    for _i in range(maxiteration):
+    for i in range(maxiteration):
         currentcluster=assignclusters(currentcenter, data)
         currentcenter, tolerance=optimalcenter(data, currentcenter, currentcluster, k)
-        usediterations += 1
-        if tolerance:
+        usediterations = i
+        if not tolerance:
             break
     currentcluster=assignclusters(currentcenter, data)
     usedtime=time()-t0
-    return currentcenter, currentcluster, usedtime
+    return currentcenter, currentcluster, usedtime, usediterations
 
 def assignclusters(currentcenter,data):
     currentcluster=[]    
-    for p in range(len(data)):        
+    for p in range(len(data)):              
         mindistance=sys.maxsize
         assignto=-1
         for i in range(len(currentcenter)):
-            distance=point_eudistance(data[p],data[currentcenter[i]])
-            if distance<mindistance:
-                mindistance=distance
-                assignto=i
+            distance = point_eudistance(data[p],data[currentcenter[i]])
+            if distance < mindistance:
+                mindistance = distance
+                assignto = i
         currentcluster.append(assignto)
+    print("currentcluster: "+str(currentcluster)+"\n")
     return currentcluster
 
 def optimalcenter(data, currentcenters, currentcluster, k):
-    tolerance=True
     optimalcenter=[]
-    members=[[] for _i in range(k)]
-    ##for p in range(len(currentcenters)):
-    ##    members[p] = []   
+    members=[[] for _i in range(k)]   
     for p in range(len(data)):
         members[currentcluster[p]].append(p)
     
-    for p in range(len(currentcenters)):
+    centerchanged = False
+    for p in range(len(currentcenters)):        
         member=members[p]
         center=currentcenters[p]
+        new_center=center
         currentcost=0
         for m in member:
             currentcost += point_eudistance(data[m],data[center])
-        for m in member:
+        ##print("currentcost:" + str(currentcost))
+        for m in member:            
             newcost=0
             for other in member:
-                newcost += point_eudistance(data[other],data[m])
-            if newcost<currentcost and abs(newcost-currentcost)<0.01 :
-                tolerance=False
-                currentcost=newcost
-                center=m
-        optimalcenter.append(center)
-    return optimalcenter, tolerance
+                newcost += point_eudistance(data[other],data[m])     
+            ##print("newcost: "+str(newcost))           
+            if newcost < currentcost:
+                centerchanged = True
+                currentcost = newcost
+                ##print("before, center: "+str(new_center))
+                new_center = m
+                ##print("after, center: "+str(new_center)+"\n")
+        ##print("optimal center: "+str(new_center)+"\n")
+        optimalcenter.append(new_center)
+    return optimalcenter, centerchanged
 
 
    
@@ -112,15 +117,15 @@ if __name__ == '__main__':
 
     fn.close()
     
-    centers, clusters, pTime = kmedoids(100, dataset, maxiterations)
-    labels = assignclusters(centers, dataset)
-    error = compute_quantization_error(dataset, labels, centers)
+    centers, clusters, pTime, usediterations = kmedoids(100, dataset, maxiterations)
+    ##labels = assignclusters(centers, dataset)
+    error = compute_quantization_error(dataset, clusters, centers)
     
     with open(filename[:-4]+"_kmedoids_fullset_100.txt",'w',encoding='utf-8') as f:
         f.write("used time: "+str(pTime)+"\n# of Clusters:100\nCluster\n")
         f.write('quantization error on the full data set: '+str(error)+'\n')
         f.write('\n\nlabels for full data set:\n')
-        for item in labels:
+        for item in clusters:
             f.write(str(item)+'\n')    
         f.write('\n\ncluster centroids:\n')
         for item in centers:
@@ -128,14 +133,14 @@ if __name__ == '__main__':
         f.close()
     
     centers, clusters, pTime = kmedoids(500, dataset, maxiterations)
-    labels = assignclusters(centers, dataset)
-    error = compute_quantization_error(dataset, labels, centers)
+    ##labels = assignclusters(centers, dataset)
+    error = compute_quantization_error(dataset, clusters, centers)
     
     with open(filename[:-4]+"_kmedoids_fullset_500.txt",'w',encoding='utf-8') as f:
         f.write("used time: "+str(pTime)+"\n# of Clusters:500\nCluster\n")
         f.write('quantization error on the full data set: '+str(error)+'\n')
         f.write('\n\nlabels for full data set:\n')
-        for item in labels:
+        for item in clusters:
             f.write(str(item)+'\n')    
         f.write('\n\ncluster centroids:\n')
         for item in centers:
