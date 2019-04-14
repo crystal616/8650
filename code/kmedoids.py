@@ -21,7 +21,7 @@ def kmedoids(k, data, weight, maxiteration):
     for _i in range(maxiteration):
         currentcluster=assignclusters(currentcenter, data)
         currentcenter, tolerance=optimalcenter(data, currentcenter, currentcluster, weight, k)
-        usediterations += 1
+        usediterations = usediterations+1
         if tolerance:
             break
     currentcluster=assignclusters(currentcenter, data)
@@ -79,7 +79,7 @@ def compute_quantization_error(data, labels, cluster_centers):
 def point_eudistance(a, centroid):
     d=0
     for i in range(numOfVariable):
-        d += math.pow((vector[i]-centroid[i]),2) 
+        d += math.pow((a[i]-centroid[i]),2) 
     return d
 
 def eudistance(a, centroid):
@@ -183,7 +183,7 @@ if __name__ == '__main__':
      
     print("total distances:",totald)
     
-    f=open(filename[:-4]+'_Statistics.txt','w')
+    f=open(filename[:-4]+'_kmedoids_Statistics.txt','w')
     f.write("size n:" + str(nsize) + "\nsum: "+str(sumv)+"\ncenter: "+str(center)+"\ntotal distance: "+str(totald))
     f.close()
  
@@ -218,7 +218,7 @@ if __name__ == '__main__':
             chosen=np.random.choice(size, s, replace=False, p=posibilities)    
             subData=[]
             weights=[]
-            with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " LWCS.txt",'w',encoding='utf-8') as f:
+            with open(filename[:-4]+'_kmedoids_'+str(s)+"_"+str(sampleTimes+1) + " LWCS.txt",'w',encoding='utf-8') as f:
                 for item in chosen:
                     f.write(str(item)+"\t"+str(1/(s*float(posibilities[item])))+'\n')
                     subData.append(dataset[item])
@@ -229,7 +229,7 @@ if __name__ == '__main__':
                 labels = assignclusters(centers, dataset)
                 error = compute_quantization_error(dataset, labels, centers)
                 variances[sampleTimes].append(error)
-                with open(filename[:-4]+"_LWCS_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
+                with open(filename[:-4]+"_kmedoids_LWCS_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
                     f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
                     f.write('\n\nlabels for full data set:\n')
@@ -239,7 +239,7 @@ if __name__ == '__main__':
                     for item in centers:
                         f.write(str(item)+'\n')                        
                     f.close()
-        with open(filename[:-4]+'_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
+        with open(filename[:-4]+'_kmedoids_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
             f.write("Sample Size: "+str(s)+"\n")
             f.write("Clusters=100\tClusters=500\n")
             for item in variances:
@@ -256,7 +256,7 @@ if __name__ == '__main__':
             chosen = np.random.choice(size, s, replace=False)
             subData=[]
             weights=[]
-            with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
+            with open(filename[:-4]+'_kmedoids_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
                 for item in chosen:
                     f.write(str(item)+'\n')
                     subData.append(dataset[item])
@@ -267,7 +267,7 @@ if __name__ == '__main__':
                 labels = assignclusters(centers, dataset)
                 error = compute_quantization_error(dataset, labels, centers)
                 variances[sampleTimes].append(error)
-                with open(filename[:-4]+"_Uniform_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
+                with open(filename[:-4]+"_kmedoids_Uniform_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
                     f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
                     f.write('\n\nlabels for full data set:\n')
@@ -277,7 +277,7 @@ if __name__ == '__main__':
                     for item in centers:
                         f.write(str(item)+'\n')                        
                     f.close()
-        with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
+        with open(filename[:-4]+'_kmedoids_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
             f.write("Sample Size: "+str(s)+"\n")
             f.write("Clusters=100\tClusters=500\n")
             for item in variances:
