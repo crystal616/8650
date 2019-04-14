@@ -14,50 +14,56 @@ import numpy as np
 import argparse
 import sys
        
-
 def kmedoids(k, data, weight, maxiteration):      
     t0 = time()
-    currentcenter = np.random.choice(len(data), k, replace=False)
+    currentcenter = np.random.choice(len(data), k, replace=False)   
     for _i in range(maxiteration):
         currentcluster=assignclusters(currentcenter, data)
-        currentcenter=optimalcenter(data, currentcenter, currentcluster, weight, k)
+        currentcenter, tolerance=optimalcenter(data, currentcenter, currentcluster, weight, k)
+        if tolerance:
+            break
     currentcluster=assignclusters(currentcenter, data)
     usedtime=time()-t0
     return currentcenter, currentcluster, usedtime
 
 def assignclusters(currentcenter,data):
-    currentcluster=[]
-    for p in range(len(data)):
+    currentcluster=[]    
+    for p in range(len(data)):        
         mindistance=sys.maxsize
         assignto=-1
         for i in range(len(currentcenter)):
-            distance=eudistance(data[p],currentcenter[i])
+            distance=point_eudistance(data[p],data[currentcenter[i]])
             if distance<mindistance:
                 mindistance=distance
                 assignto=i
         currentcluster.append(assignto)
-    
     return currentcluster
 
-def optimalcenter(data, currentcenter, currentcluster, weight,k):
+def optimalcenter(data, currentcenters, currentcluster, weight, k):
+    tolerance=True
     optimalcenter=[]
-    for center in range(k):
-        member=[]
-        currentcenter=currentcenter[center]
+    members=[[] for _i in range(k)]
+    ##for p in range(len(currentcenters)):
+    ##    members[p] = []   
+    for p in range(len(data)):
+        members[currentcluster[p]].append(p)
+    
+    for p in range(len(currentcenters)):
+        member=members[p]
+        center=currentcenters[p]
         currentcost=0
-        for c in range(len(data)):
-            if currentcluster[c]==center:
-                member.append(c)
-                currentcost += weight[c]*eudistance(data[c],currentcenter[center])
-        for m in range(len(member)):
+        for m in member:
+            currentcost += weight[m]*point_eudistance(data[m],data[center])
+        for m in member:
             newcost=0
-            for other in range(len(member)):
-                newcost += weight[other]*eudistance(member[other],member[m])
-            if newcost<currentcost:
+            for other in member:
+                newcost += weight[other]*point_eudistance(data[other],data[m])
+            if newcost<currentcost and abs(newcost-currentcost)<0.01 :
+                tolerance=False
                 currentcost=newcost
-                currentcenter=member[m]
-        optimalcenter.append(currentcenter)
-    return optimalcenter
+                center=m
+        optimalcenter.append(center)
+    return optimalcenter, tolerance
 
 
    
@@ -65,8 +71,14 @@ def optimalcenter(data, currentcenter, currentcluster, weight,k):
 def compute_quantization_error(data, labels, cluster_centers):
     error = 0
     for i in range(len(data)):
-        error += eudistance(data[i], cluster_centers[labels[i]])
+        error += point_eudistance(data[i], data[cluster_centers[labels[i]]])
     return error
+
+def point_eudistance(a, centroid):
+    d=0
+    for i in range(numOfVariable):
+        d += math.pow((vector[i]-centroid[i]),2) 
+    return d
 
 def eudistance(a, centroid):
     d=0
@@ -93,6 +105,7 @@ def probability(a, centroid, n, totaldistance):
             d += math.pow((vector[i]-centroid[i]),2) 
         vector.append(0.5/n + 0.5*d/totaldistance)
     return a
+    
     
 
 if __name__ == '__main__':
@@ -197,9 +210,9 @@ if __name__ == '__main__':
     
     #lightweaight coreset
     for s in sampleSize:
-        variances=[]        
+        variances=[[] for _i in range(repeat)]          
         for sampleTimes in range(repeat):    
-            variances[sampleTimes]=[]
+            ##variances[sampleTimes]=[]
             chosen=np.random.choice(size, s, replace=False, p=posibilities)    
             subData=[]
             weights=[]
@@ -222,9 +235,7 @@ if __name__ == '__main__':
                         f.write(str(item)+'\n')    
                     f.write('\n\ncluster centroids:\n')
                     for item in centers:
-                        for coord in item:
-                            f.write(str(item)+'\t')
-                        f.write('\n')
+                        f.write(str(item)+'\n')                        
                     f.close()
         with open(filename[:-4]+'_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
             f.write("Sample Size: "+str(s)+"\n")
@@ -237,9 +248,9 @@ if __name__ == '__main__':
     
     #uniform sampling
     for s in sampleSize:
-        variances=[]
+        variances=[[] for _i in range(repeat)]  
         for sampleTimes in range(repeat):
-            variances[sampleTimes]=[]
+            ##variances[sampleTimes]=[]
             chosen = np.random.choice(size, s, replace=False)
             subData=[]
             weights=[]
@@ -262,9 +273,7 @@ if __name__ == '__main__':
                         f.write(str(item)+'\n')    
                     f.write('\n\ncluster centroids:\n')
                     for item in centers:
-                        for coord in item:
-                            f.write(str(item)+'\t')
-                        f.write('\n')
+                        f.write(str(item)+'\n')                        
                     f.close()
         with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
             f.write("Sample Size: "+str(s)+"\n")
