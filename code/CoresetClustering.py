@@ -157,9 +157,9 @@ if __name__ == '__main__':
     
     #lightweaight coreset
     for s in sampleSize:
-		variances=[]		
+	variances=[[] for _i in range(repeat)]  		
         for sampleTimes in range(repeat):	
-			variances[sampleTimes]=[]
+	    ##variances[sampleTimes]=[]
             chosen=np.random.choice(size, s, replace=False, p=posibilities)    
             subData=[]
             weights=[]
@@ -173,7 +173,7 @@ if __name__ == '__main__':
                 predictKM, pTime = kmeans(k, subData, weights)
                 labels = predictKM.predict(dataset)
                 error = compute_quantization_error(dataset, labels, predictKM.cluster_centers_)
-				variances[sampleTimes].append(error)
+		variances[sampleTimes].append(error)
                 with open(filename[:-4]+"_LWCS_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
                     f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
@@ -183,23 +183,23 @@ if __name__ == '__main__':
                     f.write('\n\ncluster centroids:\n')
                     for item in predictKM.cluster_centers_:
                         for coord in item:
-                            f.write(str(item)+'\t')
+                            f.write(str(coord)+'\t')
                         f.write('\n')
                     f.close()
         with open(filename[:-4]+'_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
-			f.write("Sample Size: "+str(s)+"\n")
-			f.write("Clusters=100\tClusters=500\n")
+	    f.write("Sample Size: "+str(s)+"\n")
+	    f.write("Clusters=100\tClusters=500\n")
             for item in variances:
-				for v in item:
-					f.write(str(v)+"\t")
-				f.write("\n")
+		for v in item:
+		    f.write(str(v)+"\t")
+		f.write("\n")
         f.close()  
     
     #uniform sampling
     for s in sampleSize:
-		variances=[]
-        for sampleTimes in range(repeat):
-			variances[sampleTimes]=[]
+	variances=[[] for _i in range(repeat)]  
+	for sampleTimes in range(repeat):
+	    ##variances[sampleTimes]=[]
             chosen = np.random.choice(size, s, replace=False)
             subData=[]
             with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
@@ -211,7 +211,7 @@ if __name__ == '__main__':
                 predictKM, pTime = kmeans(k, subData, None)
                 labels = predictKM.predict(dataset)
                 error = compute_quantization_error(dataset, labels, predictKM.cluster_centers_)
-				variances[sampleTimes].append(error)
+		variances[sampleTimes].append(error)
                 with open(filename[:-4]+"_Uniform_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
                     f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
@@ -221,17 +221,17 @@ if __name__ == '__main__':
                     f.write('\n\ncluster centroids:\n')
                     for item in predictKM.cluster_centers_:
                         for coord in item:
-                            f.write(str(item)+'\t')
+                            f.write(str(coord)+'\t')
                         f.write('\n')
-                    f.close()
-		with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
-			f.write("Sample Size: "+str(s)+"\n")
-			f.write("Clusters=100\tClusters=500\n")
+                f.close()
+	with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
+	    f.write("Sample Size: "+str(s)+"\n")
+	    f.write("Clusters=100\tClusters=500\n")
             for item in variances:
-				for v in item:
-					f.write(str(v)+"\t")
-				f.write("\n")
-        f.close()
+		for v in item:
+	            f.write(str(v)+"\t")
+		f.write("\n")
+	f.close()
 		
 		
 

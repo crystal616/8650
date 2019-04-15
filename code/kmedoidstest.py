@@ -18,55 +18,95 @@ import sys
 def kmedoids(k, data, weight, maxiteration):      
     t0 = time()
     currentcenter = np.random.choice(len(data), k, replace=False)
-    for _i in range(maxiteration):
+    print("initialcenter: "+str(currentcenter)+"\n")
+    usediterations=0 
+    for i in range(maxiteration):
+        temp=currentcenter
         currentcluster=assignclusters(currentcenter, data)
-        currentcenter=optimalcenter(data, currentcenter, currentcluster, weight, k)
+        currentcenter, centerchanged=optimalcenter(data, temp, currentcluster, weight, k)
+        usediterations = i
+        if not centerchanged:
+            break
+        
     currentcluster=assignclusters(currentcenter, data)
     usedtime=time()-t0
-    return currentcenter, currentcluster, usedtime
+    return currentcenter, currentcluster, usedtime, usediterations
 
 def assignclusters(currentcenter,data):
-    currentcluster=[]
-    for p in range(len(data)):
+    currentcluster=[]    
+    for p in range(len(data)):              
         mindistance=sys.maxsize
         assignto=-1
         for i in range(len(currentcenter)):
-            distance=eudistance(data[p],currentcenter[i])
-            if distance<mindistance:
-                mindistance=distance
-                assignto=i
+            distance = point_eudistance(data[p],data[currentcenter[i]])
+            if distance < mindistance:
+                mindistance = distance
+                assignto = i
         currentcluster.append(assignto)
-    
+    print("currentcluster: "+str(currentcluster)+"\n")
     return currentcluster
 
-def optimalcenter(data, currentcenter, currentcluster, weight,k):
+def assignfullsetclusters(fullset, subset, cluster_centers):
+    clusters=[]    
+    for p in range(len(fullset)):             
+        mindistance=sys.maxsize
+        assignto=-1
+        for i in range(len(cluster_centers)):
+            distance = point_eudistance(fullset[p],subset[cluster_centers[i]])
+            if distance < mindistance:
+                mindistance = distance
+                assignto = i
+        clusters.append(assignto)
+    print("full set cluster: "+str(clusters)+"\n")
+    return clusters
+
+def optimalcenter(data, currentcenters, currentcluster, weight, k):
     optimalcenter=[]
-    for center in range(k):
-        member=[]
-        currentcenter=currentcenter[center]
+    members=[[] for _i in range(k)]   
+    for p in range(len(data)):
+        members[currentcluster[p]].append(p)
+    
+    centerchanged = False
+    for p in range(len(currentcenters)):        
+        member=members[p]
+        center=currentcenters[p]
+        new_center=center
         currentcost=0
-        for c in range(len(data)):
-            if currentcluster[c]==center:
-                member.append(c)
-                currentcost += weight[c]*eudistance(data[c],currentcenter[center])
-        for m in range(len(member)):
+        for m in member:
+            currentcost += weight[m]*point_eudistance(data[m],data[center])
+        ##print("currentcost:" + str(currentcost))
+        for m in member:            
             newcost=0
-            for other in range(len(member)):
-                newcost += weight[other]*eudistance(member[other],member[m])
-            if newcost<currentcost:
-                currentcost=newcost
-                currentcenter=member[m]
-        optimalcenter.append(currentcenter)
-    return optimalcenter
+            for other in member:
+                newcost += weight[other]*point_eudistance(data[other],data[m])     
+            ##print("newcost: "+str(newcost))           
+            if newcost < currentcost:
+                centerchanged = True
+                currentcost = newcost
+                ##print("before, center: "+str(new_center))
+                new_center = m
+                ##print("after, center: "+str(new_center)+"\n")
+        ##print("optimal center: "+str(new_center)+"\n")
+        optimalcenter.append(new_center)
+    return optimalcenter, centerchanged
 
 
    
 
-def compute_quantization_error(data, labels, cluster_centers):
+def compute_quantization_error(fulldata, labels, subset, cluster_centers):
+    ##print("fulldata n: "+str(len(fulldata))+"\tlabes n: "+str(len(labels)))
+    ##print("full labels: "+str(labels))
+    ##print("subdata n: "+str(len(subset))+"\tcenters n: "+str(len(cluster_centers))+"\n\n")
     error = 0
-    for i in range(len(data)):
-        error += eudistance(data[i], cluster_centers[labels[i]])
+    for i in range(len(fulldata)):
+        error += point_eudistance(fulldata[i], subset[cluster_centers[labels[i]]])
     return error
+
+def point_eudistance(a, centroid):
+    d=0
+    for i in range(numOfVariable):
+        d += math.pow((a[i]-centroid[i]),2) 
+    return d
 
 def eudistance(a, centroid):
     d=0
@@ -168,7 +208,7 @@ if __name__ == '__main__':
      
     print("total distances:",totald)
     
-    f=open(filename[:-4]+'_Statistics.txt','w')
+    f=open(filename[:-4]+'_kmedoids_Statistics.txt','w')
     f.write("size n:" + str(nsize) + "\nsum: "+str(sumv)+"\ncenter: "+str(center)+"\ntotal distance: "+str(totald))
     f.close()
  
@@ -197,36 +237,31 @@ if __name__ == '__main__':
     
     #lightweaight coreset
     for s in sampleSize:
-        variances=[]        
+        variances=[[] for _i in range(repeat)]        
         for sampleTimes in range(repeat):    
-            variances[sampleTimes]=[]
+            ##variances[sampleTimes]=[]
             chosen=np.random.choice(size, s, replace=False, p=posibilities)    
             subData=[]
             weights=[]
-            with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " LWCS.txt",'w',encoding='utf-8') as f:
+            with open(filename[:-4]+'_kmedoids_'+str(s)+"_"+str(sampleTimes+1) + " LWCS.txt",'w',encoding='utf-8') as f:
                 for item in chosen:
                     f.write(str(item)+"\t"+str(1/(s*float(posibilities[item])))+'\n')
                     subData.append(dataset[item])
                     weights.append(1/(s*float(posibilities[item])))
             f.close()
             for k in clusters:
-                centers, clusters, pTime = kmedoids(k, subData, weights,maxiterations)
-                labels = assignclusters(centers, dataset)
-                error = compute_quantization_error(dataset, labels, centers)
+                centers, clusters, pTime, usediterations = kmedoids(k, subData, weights, maxiterations)
+                labels = assignfullsetclusters(dataset, subData, centers)
+                print("\n\nlabels done")
+                error = compute_quantization_error(dataset, labels, subData, centers)
+                print("\n\nerror done!")
                 variances[sampleTimes].append(error)
                 with open(filename[:-4]+"_LWCS_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
-                    f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
+                    f.write("used time: "+str(pTime)+"\nUsed iterations: "+str(usediterations)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
-                    f.write('\n\nlabels for full data set:\n')
-                    for item in labels:
-                        f.write(str(item)+'\n')    
-                    f.write('\n\ncluster centroids:\n')
-                    for item in centers:
-                        for coord in item:
-                            f.write(str(item)+'\t')
-                        f.write('\n')
-                    f.close()
-        with open(filename[:-4]+'_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
+                                          
+                f.close()
+        with open(filename[:-4]+'_kmedoids_'+str(s)+"_" + "Variances LWCS.txt",'w',encoding='utf-8') as f:
             f.write("Sample Size: "+str(s)+"\n")
             f.write("Clusters=100\tClusters=500\n")
             for item in variances:
@@ -237,36 +272,31 @@ if __name__ == '__main__':
     
     #uniform sampling
     for s in sampleSize:
-        variances=[]
+        variances=[[] for _i in range(repeat)]
         for sampleTimes in range(repeat):
-            variances[sampleTimes]=[]
+            ##variances[sampleTimes]=[]
             chosen = np.random.choice(size, s, replace=False)
             subData=[]
             weights=[]
-            with open(filename[:-4]+'_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
+            with open(filename[:-4]+'_kmedoids_'+str(s)+"_"+str(sampleTimes+1) + " Uniform.txt",'w',encoding='utf-8') as f:
                 for item in chosen:
                     f.write(str(item)+'\n')
                     subData.append(dataset[item])
                     weights.append(1)
             f.close()
             for k in clusters:
-                centers, clusters, pTime = kmedoids(k, subData, weights,maxiterations)
-                labels = assignclusters(centers, dataset)
-                error = compute_quantization_error(dataset, labels, centers)
+                centers, clusters, pTime, usediterations = kmedoids(k, subData, weights, maxiterations)
+                labels = assignfullsetclusters(dataset, subData, centers)
+                print("\n\nlabels done")
+                error = compute_quantization_error(dataset, labels, subData, centers)
+                print("\n\nerror done!")
                 variances[sampleTimes].append(error)
-                with open(filename[:-4]+"_Uniform_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
-                    f.write("used time: "+str(pTime)+"\n# of Clusters:"+str(k)+"\nCluster\n")
+                with open(filename[:-4]+"_LWCS_"+str(s)+"_r_"+str(sampleTimes+1)+"_k_"+str(k)+".txt",'w',encoding='utf-8') as f:
+                    f.write("used time: "+str(pTime)+"\nUsed iterations: "+str(usediterations)+"\n# of Clusters:"+str(k)+"\nCluster\n")
                     f.write('quantization error on the full data set: '+str(error)+'\n')
-                    f.write('\n\nlabels for full data set:\n')
-                    for item in labels:
-                        f.write(str(item)+'\n')    
-                    f.write('\n\ncluster centroids:\n')
-                    for item in centers:
-                        for coord in item:
-                            f.write(str(item)+'\t')
-                        f.write('\n')
-                    f.close()
-        with open(filename[:-4]+'_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
+                                          
+                f.close()
+        with open(filename[:-4]+'_kmedoids_'+str(s)+"_" + "Variances Uniform.txt",'w',encoding='utf-8') as f:
             f.write("Sample Size: "+str(s)+"\n")
             f.write("Clusters=100\tClusters=500\n")
             for item in variances:
