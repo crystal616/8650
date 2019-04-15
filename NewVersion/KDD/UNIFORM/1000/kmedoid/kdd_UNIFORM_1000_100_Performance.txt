@@ -1,0 +1,154 @@
+run 1
+used time: 9.582581996917725
+quantization error on the full data set: 879431005665.2976
+run 2
+used time: 9.688219547271729
+quantization error on the full data set: 901134468971.549
+run 3
+used time: 7.652706861495972
+quantization error on the full data set: 741994663166.6014
+run 4
+used time: 13.389299154281616
+quantization error on the full data set: 386968030317.09033
+run 5
+used time: 7.56890344619751
+quantization error on the full data set: 900032664451.8958
+run 6
+used time: 9.568691968917847
+quantization error on the full data set: 401696868584.9745
+run 7
+used time: 11.668227195739746
+quantization error on the full data set: 933607026538.5018
+run 8
+used time: 9.567607164382935
+quantization error on the full data set: 875287933625.8752
+run 9
+used time: 7.543423652648926
+quantization error on the full data set: 387297027167.40753
+run 10
+used time: 9.422292947769165
+quantization error on the full data set: 939736421889.7806
+run 11
+used time: 7.649315118789673
+quantization error on the full data set: 843775899934.5884
+run 12
+used time: 9.60219144821167
+quantization error on the full data set: 807129067484.985
+run 13
+used time: 7.5390236377716064
+quantization error on the full data set: 980877787187.5875
+run 14
+used time: 7.541542291641235
+quantization error on the full data set: 845435648640.5602
+run 15
+used time: 9.511439085006714
+quantization error on the full data set: 992360697891.9329
+run 16
+used time: 9.492799758911133
+quantization error on the full data set: 392700182765.28937
+run 17
+used time: 9.470618486404419
+quantization error on the full data set: 372504467598.2089
+run 18
+used time: 7.551592588424683
+quantization error on the full data set: 893399668704.7103
+run 19
+used time: 11.56119418144226
+quantization error on the full data set: 791413825479.9912
+run 20
+used time: 7.5401084423065186
+quantization error on the full data set: 1015458571382.8357
+run 21
+used time: 11.377805948257446
+quantization error on the full data set: 867480823746.5339
+run 22
+used time: 11.44561767578125
+quantization error on the full data set: 823922121040.4862
+run 23
+used time: 9.56618356704712
+quantization error on the full data set: 977070176360.0503
+run 24
+used time: 13.418976783752441
+quantization error on the full data set: 835046972034.4266
+run 25
+used time: 9.517103672027588
+quantization error on the full data set: 401943097705.63086
+run 26
+used time: 7.6337220668792725
+quantization error on the full data set: 828565299639.5162
+run 27
+used time: 7.501788377761841
+quantization error on the full data set: 833828553698.5342
+run 28
+used time: 7.52674412727356
+quantization error on the full data set: 677685121896.0349
+run 29
+used time: 11.381031513214111
+quantization error on the full data set: 364899776633.1059
+run 30
+used time: 13.464049816131592
+quantization error on the full data set: 673446100940.2206
+run 31
+used time: 11.542867183685303
+quantization error on the full data set: 881331703235.3271
+run 32
+used time: 9.441466808319092
+quantization error on the full data set: 720490062842.9565
+run 33
+used time: 9.60562252998352
+quantization error on the full data set: 881790096579.4236
+run 34
+used time: 11.447782278060913
+quantization error on the full data set: 677710599451.8524
+run 35
+used time: 13.452205419540405
+quantization error on the full data set: 357071639693.2492
+run 36
+used time: 9.426679134368896
+quantization error on the full data set: 805223907545.8995
+run 37
+used time: 7.523535490036011
+quantization error on the full data set: 966048221012.1283
+run 38
+used time: 9.514448404312134
+quantization error on the full data set: 842791568973.0352
+run 39
+used time: 13.260149002075195
+quantization error on the full data set: 404033702496.833
+run 40
+used time: 9.529161930084229
+quantization error on the full data set: 1009619566313.077
+run 41
+used time: 9.527265787124634
+quantization error on the full data set: 868127841705.9519
+run 42
+used time: 7.597356557846069
+quantization error on the full data set: 899831442954.6045
+run 43
+used time: 9.41122817993164
+quantization error on the full data set: 794472054125.5142
+run 44
+used time: 9.534406185150146
+quantization error on the full data set: 686077085560.7566
+run 45
+used time: 9.558844089508057
+quantization error on the full data set: 896761948476.7007
+run 46
+used time: 9.532607316970825
+quantization error on the full data set: 867582268508.3873
+run 47
+used time: 9.485100030899048
+quantization error on the full data set: 357617948762.2435
+run 48
+used time: 9.58942198753357
+quantization error on the full data set: 665995682736.0446
+run 49
+used time: 9.500264883041382
+quantization error on the full data set: 498456577371.1141
+run 50
+used time: 7.605118036270142
+quantization error on the full data set: 933205288023.2041
+
+
+avg_error: 751607383550.2501
+var_error: 4.352507671915369e+22
