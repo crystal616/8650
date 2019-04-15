@@ -14,7 +14,10 @@ Two datasets are analyzed in this study.
 Using "awk" to convert the original dataset file to a file containing only feature values seperated by whitespace.
 
 KDD/bio\_train.data -> KDD/kdd.txt
+
 SONG/YearPredictionMSD.txt -> SONG/song.txt
+
+(files are not uploaded due to size limitation)
 
 ## Corset constructions
 (lightweightCorset.py, strongCorset.py, uniform.py)
@@ -27,6 +30,6 @@ Corsets are generated using three methods:
 50 corsets of size 1000, 2000, 5000 are generated using each of those three methods. For CS, number of clusters k = 100, 500, were used.
 
 ## Performance evaluation
-(kmean\_eval.py, kmedoid\_eval.py)
+(kmean\_eval.py, kmedoid\_eval.py, kmean\_full.py, kmedoid\_full.py)
 
 Both Kmeans and Kmedoids were ran on those corests. The quantization error on the full dataset were computed and compared to the results from Kmeans and Kmedoids ran on the full dataset.
