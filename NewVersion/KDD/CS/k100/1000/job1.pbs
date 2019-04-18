@@ -1,0 +1,18 @@
+#!/bin/bash
+#PBS -N cs100
+#PBS -l select=1:ncpus=8:mpiprocs=8:mem=60gb
+#PBS -l walltime=72:00:00
+
+module purge
+module add anaconda/5.1.0
+
+cd /scratch4/wenxinz/8650-project/KDD
+
+source activate tf_env
+
+python strongCorsets.py  kdd.txt 74 100 1000 --numOfCorset=50
+
+source deactivate tf_env
+
+sleep 5
+

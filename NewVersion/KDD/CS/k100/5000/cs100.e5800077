@@ -1,0 +1,2 @@
+strongCorsets.py:66: RuntimeWarning: divide by zero encountered in true_divide
+  probability = probability/np.sum(probability)
