@@ -24,12 +24,102 @@ SONG/YearPredictionMSD.txt -> SONG/song.txt
 
 Corsets are generated using three methods:
 1) LWCS 
+
+usage: `ligtweightCoresets.py [-h] [--numOfCorset NUMOFCORSET]
+                             [--numOfCore NUMOFCORE]
+                             numOfVariable filename samplesize`
+
+Lightweight coreset construction
+
+positional arguments:
+*  `numOfVariable`         number of attributes
+*  `filename`              file name
+*  `samplesize`            coreset size
+
+optional arguments:
+*  `-h, --help`            show this help message and exit
+*  `--numOfCorset NUMOFCORSET`
+                        number of coresets to construct
+*  `--numOfCore NUMOFCORE`
+                        number of cores to use
+
 2) CS
+
+usage: `strongCorsets.py [-h] [--numOfCorset NUMOFCORSET]
+                        [--distance_func DISTANCE_FUNC]
+                        filename numOfVariable cluster_number samplesize`
+
+CS coreset construction
+
+positional arguments:
+ * `filename`              file name
+ * `numOfVariable`         number of attributes
+ * `cluster_number`        number of cluster
+ * `samplesize`            coreset size
+
+optional arguments:
+ * `-h, --help`            show this help message and exit
+ * `--numOfCorset NUMOFCORSET`
+                        number of coresets to construct
+ * `--distance_func DISTANCE_FUNC`
+                        function to calculate the distance
+
 3) UNIFROM
 
+usage: `uniform.py [-h] [--numOfCorset NUMOFCORSET]
+                  filename numOfVariable samplesize`
+
+Uniformly subsampling
+
+positional arguments:
+ * `filename`              file name
+ * `numOfVariable`         number of attributes
+ * `samplesize`            coreset size
+
+optional arguments:
+ * `-h, --help`            show this help message and exit
+ * `--numOfCorset NUMOFCORSET`
+                        number of coresets to construct
+                       
 50 corsets of size 1000, 2000, 5000 are generated using each of those three methods. For CS, number of clusters k = 100, 500, were used.
 
 ## Performance evaluation
 (kmean\_eval.py, kmedoid\_eval.py, kmean\_full.py, kmedoid\_full.py)
+
+usage: `kmean_eval.py [-h]
+                     {kdd,song} {LWCS,CS,UNIFORM} numOfVariable numOfCluster
+                     samplesize numOfCorsets`
+
+performance of kmeans via corsets
+
+positional arguments:
+ * `{kdd,song}`         dataset name
+ * `{LWCS,CS,UNIFORM}`  corset construction method
+ * `numOfVariable`      number of attributes
+ * `numOfCluster`       number of clusters
+ * `samplesize`         corset size
+ * `numOfCorsets`       number of corsets
+
+optional arguments:
+ * `-h, --help`         show this help message and exit
+
+usage: `kmedoid_eval.py [-h] [--maxiterations MAXITERATIONS]
+                       {kdd,song} {LWCS,CS,UNIFORM} numOfVariable numOfCluster
+                       samplesize numOfCorsets`
+
+performance of kmeans via corsets
+
+positional arguments:
+ * `{kdd,song}`            dataset name
+ * `{LWCS,CS,UNIFORM}`     corset construction method
+ * `numOfVariable`         number of attributes
+ * `numOfCluster`          number of clusters
+ * `samplesize`            corset size
+ * `numOfCorsets`          number of corsets
+
+optional arguments:
+ * `-h, --help`            show this help message and exit
+ * `--maxiterations MAXITERATIONS`
+                        max number of iterations
 
 Both Kmeans and Kmedoids were ran on those corests. The quantization error on the full dataset were computed and compared to the results from Kmeans and Kmedoids ran on the full dataset.
