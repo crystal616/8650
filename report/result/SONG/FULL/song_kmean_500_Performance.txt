@@ -1,0 +1,2 @@
+used time: 10911.871312618256
+quantization error on the full data set: 1142463969771.0989
